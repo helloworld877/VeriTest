@@ -1,3 +1,4 @@
+import os
 import re
 from PARSER.GraphAPI import GraphAPI
 from PARSER.preprocessing.find import get_input_output
@@ -34,8 +35,8 @@ def input_output_wire(PATH):
 
 
 def output_file(in_out, test_cases, path):
-
-    output_file = "output/output_file.txt"
+    HOME = os.environ.get('VERITEST_HOME')
+    output_file = f"{HOME}/output/output_file.txt"
 
     # Open the file in write mode ('w')
     with open(output_file, 'w') as file:

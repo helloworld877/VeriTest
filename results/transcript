@@ -1,5 +1,5 @@
 # vsim tb 
-# Start time: 19:32:51 on Apr 18,2024
+# Start time: 12:18:11 on Apr 20,2024
 # Loading work.tb
 # Loading work.seg
 run
@@ -39,5 +39,5 @@ run
 #  total cases==>         16 
 #  successful cases==>         16 
 #  failed cases==>          0
-# End time: 19:32:59 on Apr 18,2024, Elapsed time: 0:00:08
+# End time: 12:18:18 on Apr 20,2024, Elapsed time: 0:00:07
 # Errors: 0, Warnings: 0

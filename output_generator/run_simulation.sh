@@ -11,11 +11,11 @@ else
 fi
 
 
-# cd "results"
+cd "results"
 
-# vlog "generated_tb.v"
+vlog "generated_tb.v"
 
-# # Check the exit status of the vlog command
+# Check the exit status of the vlog command
 # if [ $? -eq 0 ]; then
 #     echo "vlog succeeded"
 #     vlog "$(basename "$1")"
@@ -26,5 +26,5 @@ fi
 
 # fi
 
-# cd ..
+cd ..
 

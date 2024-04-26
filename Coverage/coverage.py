@@ -11,6 +11,7 @@ from Coverage.random_stimuli import random_stimuli
 import matplotlib.pyplot as plt
 from PARSER.graph import parse_verilog
 import sys
+import os
 sys.path.append("..")
 
 
@@ -605,7 +606,8 @@ def traverse(node, testcase_id, blocks_covered, Dict_of_Branches, G, input_test_
 
 def remove_delay_control(file):
     # Read file
-    with open("PARSER/files/" + file, 'r') as f:
+    HOME = os.environ.get('VERITEST_HOME')
+    with open(f"{HOME}/PARSER/files/" + file, 'r') as f:
         content = f.read()
 
     # Delay control regex pattern # then any number of digits then either ; or not followed by whitespaces
