@@ -60,6 +60,8 @@ def upload_files():
             print("EXCEPTION")
             print(e)
             return jsonify(success=False, error=str(e)), 400
+    elif (mode_number == '2'):
+        return jsonify(success=True), 200
     else:
         return jsonify(success=False, error="Invalid Mode_Number"), 400
 
