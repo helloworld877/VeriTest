@@ -7,9 +7,11 @@ import importlib
 
 def get_generator_function(filename):
     try:
-
+        HOME = os.environ.get('VERITEST_HOME')
+        print("HOME")
+        print(HOME)
         spec = importlib.util.spec_from_file_location(
-            "module.name", f"Mode_2/Generators/{filename}")
+            "module.name", f"{HOME}/Mode_2/Generators/{filename}")
         generator = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(generator)
         print(f"Successfully imported the generator: {filename}")
@@ -25,6 +27,7 @@ def get_generator_function(filename):
 
 
 def input_file_reader(file_path):
+    print(f"File Path:{file_path}")
     global specs_dict
     try:
         with open(file_path, 'r') as file:
@@ -80,7 +83,8 @@ def main():
 
         # print code to file
         try:
-            with open(f'{specs_dict["model_name"]}.py', 'w') as file:
+            # configure to run from anywhere
+            with open(f'uploaded_files/{specs_dict["model_name"]}.py', 'w') as file:
                 for line in output_code:
                     file.write(line + '\n')
             print("specs_dict written to file successfully.")

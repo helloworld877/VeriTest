@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import Image from "next/image";
+import Toggle_coverage_table_component from "./Toggle_coverage_table_component";
 
 const UploadForm = () => {
   const [vFile, setVFile] = useState(null);
@@ -72,7 +73,7 @@ const UploadForm = () => {
         </div>
       )}
       <div className="row justify-content-center">
-        <div className="col-md-6">
+        <div className="col-md-10">
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
               <label htmlFor="vFile" className="form-label">
@@ -104,15 +105,18 @@ const UploadForm = () => {
           </form>
 
           {downloadedFile && ready && (
-            <a
-              href={URL.createObjectURL(new Blob([downloadedFile]))}
-              download="result.zip"
-            >
-              <button type="button" className="mt-2 btn btn-outline-success">
-                download the Generated testbench
-              </button>
-            </a>
+            <div>
+              <a
+                href={URL.createObjectURL(new Blob([downloadedFile]))}
+                download="result.zip"
+              >
+                <button type="button" className="mt-2 btn btn-outline-success">
+                  download the Generated testbench
+                </button>
+              </a>
+            </div>
           )}
+          <Toggle_coverage_table_component />
         </div>
       </div>
     </div>

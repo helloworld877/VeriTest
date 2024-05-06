@@ -35,7 +35,7 @@ def upload_files():
 
             ################################
 
-            directory_to_zip = 'uploaded_files/results'
+            directory_to_zip = f'{HOME}/web_portal/backend/results'
 
             # Create a temporary file to store the ZIP archive
             zip_fd, zip_path = tempfile.mkstemp()
@@ -81,7 +81,7 @@ def upload_files():
 
             ################################
 
-            directory_to_zip = 'uploaded_files/results'
+            directory_to_zip = f'{HOME}/web_portal/backend/results'
 
             # Create a temporary file to store the ZIP archive
             zip_fd, zip_path = tempfile.mkstemp()

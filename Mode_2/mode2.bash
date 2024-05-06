@@ -20,7 +20,9 @@ fi
 # read verilog and json file
 
 file_path="$1"
-absolute_path=$(make_absolute_path "$file_path")
+# absolute_path=$(make_absolute_path "$file_path")
+# TODO: edit to make it run from any place
+absolute_path="$VERITEST_HOME/web_portal/backend/uploaded_files/$file_path"
 filename_without_extension=${absolute_path%.*}
 
 

@@ -20,7 +20,7 @@ nand -> logical and bitwise✅
     outputs: 'name'
 }
 ---
-adder 
+adder✅🏁
 sub
 
 =>can have different number of bits input

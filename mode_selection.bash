@@ -45,8 +45,11 @@ if [[ "$1" == *.v && "$2" == *.py ]]; then
     # getting absolute file path
     verilog_file_path="$1"
     json_file_path="$2"
-    verilog_absolute_path=$(make_absolute_path "$verilog_file_path")
-    json_absolute_path=$(make_absolute_path "$json_file_path")
+    # verilog_absolute_path=$(make_absolute_path "$verilog_file_path")
+    # json_absolute_path=$(make_absolute_path "$json_file_path")
+    # TODO: configure to run from anywhere
+    base_name=$(basename "$verilog_file_path")
+    verilog_absolute_path=$base_name
     
     
     
