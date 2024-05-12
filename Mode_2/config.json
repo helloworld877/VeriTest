@@ -4,6 +4,7 @@
     "decoder":"decoder_category_generator.py",
     "encoder":"encoder_category_generator.py",
     "not":"not_category_generator.py",
-    "seg":"seven_segment_category_generator.py"
+    "seg":"seven_segment_category_generator.py",
+    "mux":"mux_category_generator.py"
 
 }
