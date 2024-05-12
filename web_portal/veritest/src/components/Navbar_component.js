@@ -31,7 +31,7 @@ export default function Navbar_component() {
             <Link className="nav-link" href={"/mode2"}>
               Mode 2
             </Link>
-            <Link className="nav-link disabled" href={"/mode3"}>
+            <Link className="nav-link" href={"/mode3"}>
               Mode 3
             </Link>
           </div>

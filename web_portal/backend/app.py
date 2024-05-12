@@ -106,6 +106,10 @@ def upload_files():
             print("EXCEPTION")
             print(e)
             return jsonify(success=False, error=str(e)), 400
+    elif (mode_number == '3'):
+        v_file = request.files['vFile']
+        v_file.save('uploaded_files/' + v_file.filename)
+        return jsonify(success="mode3 success"), 200
     else:
         return jsonify(success=False, error="Invalid Mode_Number"), 400
 

@@ -49,12 +49,14 @@ export default function Home() {
           <div className="col d-flex flex-column align-items-center ">
             {/* mode 3 button and details paragraph */}
 
-            <button
-              type="button"
-              className="mt-2 mb-2 btn btn-lg btn-success  disabled"
-            >
-              Mode 3
-            </button>
+            <Link href={"/mode3"}>
+              <button
+                type="button"
+                className=" mt-2 mb-2 btn btn-lg btn-success"
+              >
+                Mode 3
+              </button>
+            </Link>
 
             <p className="text-center">
               Upload a verilog file and our AI model will generate a testbench

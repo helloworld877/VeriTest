@@ -1,6 +1,6 @@
 import CodeBlock from "./Code_block";
 
-export default function Mode2_documentation_component() {
+export default function Mode3_documentation_component() {
   const verilog_code = `//Verilog module.
   module seg(
       bcd,
@@ -56,29 +56,16 @@ export default function Mode2_documentation_component() {
       end
       
   endmodule`;
-
-  const json_specs_file_code = `
-  {
-    "model_name":"seg",
-    "type":"seg",
-    "input_mode":"concatenated",
-    "output_mode":"concatenated",
-    "inputs":[{"name":"bcd", "size":4}],
-    "output": [{"name":"seg","size":7}]
-  }
-  `;
-
   return (
     <div className="container">
       <div className="row">
         <div className="col pt-2">
           <div className="mb-5">
-            <h1> Mode 2</h1>
+            <h1> Mode 3</h1>
           </div>
           <p>
-            In Mode 2 you must provide 2 files a <strong>Verilog file</strong>
-            and a <strong>JSON specs file</strong> to be able to generate your
-            testbench
+            In Mode 3 you Provide a <strong>Verilog File</strong> and we predict
+            its functionality and generate its testbench for you
           </p>
           <hr />
           <h2> Verilog File</h2>
@@ -91,17 +78,6 @@ export default function Mode2_documentation_component() {
           </p>
           <CodeBlock code={verilog_code} />
           <hr />
-          <h2>JSON specs file</h2>
-          <p>
-            for the <strong>JSON specs file</strong> it must have the input
-            parameters specified in our documentation <a href="/docs">here</a>
-            <br />
-            <strong>
-              The file must be named by the same name of the Verilog file
-            </strong>
-          </p>
-          <strong>for example:</strong> seg.py
-          <CodeBlock code={json_specs_file_code} />
         </div>
 
         <div className="mt-5">
