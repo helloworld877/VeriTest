@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Define the Verilog file path as a command-line argument
-verilog_file="$1"
+verilog_file=$(realpath "$1")
 
 # Check if the file path is provided
 if [[ -z "$verilog_file" ]]; then
@@ -39,7 +39,7 @@ fi
 cd final_model_utils || { echo "Failed to change directory to final_model_utils"; exit 1; }
 
 # Call Infer_GNN.bash
-infer_output=$(bash $VERITEST_HOME/Mode_3/Infer_GNN.bash)
+infer_output=$(bash $VERITEST_HOME/Mode_3/Infer_GNN.bash $verilog_file)
 
 # Check for failure in Infer_GNN.bash
 if [[ "$infer_output" != "Success: Prediction saved in 'pred.txt'" ]]; then
