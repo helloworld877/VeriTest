@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 import os
 import json
 import sys
+import math
 
 
 if len(sys.argv) < 2:
@@ -28,16 +29,44 @@ output_variables = input_output_wire[1]
 
 
 output_json = {}
-output_json["module_name"] = os.path.basename(filename)
+base_name = os.path.basename(filename)
+filename, _ = os.path.splitext(base_name)
+output_json["model_name"] = os.path.basename(filename)
+output_json["type"] = prediction
 
 if (prediction != "not"):
     output_json["inputs"] = [{'name': name, 'size': size}
                              for name, size in input_variables.items()]
 
+###################################################################
 if (prediction in ['and', 'or', 'xor', 'nand', 'nor', 'xnor']):
-    output_json["type"] = prediction
-    # TODO:which output variable to use
-
     output_json["output"] = list(output_variables.keys())[0]
-    # which operation type to use
     output_json["operation_type"] = "bitwise"
+###################################################################
+elif (prediction in ["decoder", "encoder", "seg"]):
+    output_json["input_mode"] = "concatenated"
+    output_json["output_mode"] = "concatenated"
+    output_json["output"] = [{'name': name, 'size': size}
+                             for name, size in output_variables.items()]
+###################################################################
+elif (prediction in ["mux", "adder"]):
+    if (prediction == "adder"):
+        output_json["mode"] = "unsigned"
+    elif (prediction == "mux"):
+        output_json["input_mode"] = "concatenated"
+        output_json["output_mode"] = "concatenated"
+
+    first_key, first_value = list(output_variables.items())[0]
+    output_json["output"] = {'name': first_key, 'size': first_value}
+elif (prediction == "not"):
+    output_json["inputs_outputs"] = []
+    loop_size = min(len(list(output_variables.items())),
+                    len(list(input_variables.items())))
+    for i in range(0, loop_size):
+        input_key, input_value = list(input_variables.items())[i]
+        output_key, output_value = list(output_variables.items())[i]
+        result_dict = {"input_name": input_key, "output_name": output_key, "size": min(
+            input_value, output_value)}
+        output_json["inputs_outputs"].append(result_dict)
+
+print(output_json)
