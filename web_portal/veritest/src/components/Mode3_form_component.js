@@ -1,66 +1,173 @@
 "use client";
 import { useState } from "react";
+import DropdownFormControl from "@/components/Mode3_dropdown_component";
 
-const DropdownFormControl = () => {
-  const initialOptions = ["Option 1", "Option 2", "Option 3"];
-  const [options, setOptions] = useState(initialOptions);
-  const [selectedItems, setSelectedItems] = useState([]);
+const MyForm = () => {
+  // constants
+  // circuit Types
+  const circuitTypes = [
+    "adder",
+    "decoder",
+    "encoder",
+    "mux",
+    "not",
+    "seg",
+    "and",
+    "nand",
+    "or",
+    "nor",
+    "xor",
+    "xnor",
+  ];
+  const initialInputOptions = ["Input 1", "Input 2", "Input 3"];
+  const initialOutputOptions = ["Output A", "Output B", "Output C"];
+  // States
+  const [inputOptions, setInputOptions] = useState(initialInputOptions);
+  const [selectedInputs, setSelectedInputs] = useState([]);
 
-  const handleSelect = (e) => {
-    const option = e.target.value;
-    if (option) {
-      setOptions(options.filter((opt) => opt !== option));
-      setSelectedItems([...selectedItems, option]);
-    }
-    e.target.value = ""; // Reset the dropdown selection
+  const [outputOptions, setOutputOptions] = useState(initialOutputOptions);
+  const [selectedOutputs, setSelectedOutputs] = useState([]);
+
+  const [circuitType, setCircuitType] = useState("");
+
+  const [modelName, setModelName] = useState("");
+  /////////////////////////////////////////
+  // gate circuit type
+  const [gateTypeOperationType, setGateTypeOperationType] = useState("");
+  /////////////////////////////////////////
+
+  // state handlers
+  const handleSelectInput = (option) => {
+    setInputOptions(inputOptions.filter((opt) => opt !== option));
+    setSelectedInputs([...selectedInputs, option]);
   };
 
-  const handleRemove = (option) => {
-    setSelectedItems(selectedItems.filter((item) => item !== option));
-    setOptions([...options, option]);
+  const handleRemoveInput = (option) => {
+    setSelectedInputs(selectedInputs.filter((item) => item !== option));
+    setInputOptions([...inputOptions, option]);
   };
+
+  const handleSelectOutput = (option) => {
+    setOutputOptions(outputOptions.filter((opt) => opt !== option));
+    setSelectedOutputs([...selectedOutputs, option]);
+  };
+
+  const handleRemoveOutput = (option) => {
+    setSelectedOutputs(selectedOutputs.filter((item) => item !== option));
+    setOutputOptions([...outputOptions, option]);
+  };
+
+  const handleCircuitTypeChange = (e) => {
+    setCircuitType(e.target.value);
+  };
+  const handleModelNameChange = (e) => {
+    setModelName(e.target.value);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Handle form submission logic here, e.g., send data to a server or validate the form
+    console.log("Form submitted with selected inputs:", selectedInputs);
+    console.log("Form submitted with selected outputs:", selectedOutputs);
+  };
+
+  /////////////////////////////////////////
+  // gate circuit type
+  const handleGateTypeOperationTypeChange = (e) => {
+    setGateTypeOperationType(e.target.value);
+  };
+  /////////////////////////////////////////
 
   return (
-    <div className="container mt-4">
-      <div className="mb-3">
-        <label htmlFor="dropdown" className="form-label">
-          Select an Option
-        </label>
-        <select
-          id="dropdown"
-          className="form-select"
-          onChange={handleSelect}
-          value=""
-        >
-          <option value="" disabled>
-            Select an option
-          </option>
-          {options.map((option, index) => (
-            <option key={index} value={option}>
-              {option}
-            </option>
-          ))}
-        </select>
-      </div>
-      <ul className="list-group">
-        {selectedItems.map((item, index) => (
-          <li
-            key={index}
-            className="list-group-item d-flex justify-content-between align-items-center"
-          >
-            {item}
-            <button
-              type="button"
-              className="btn btn-outline-danger btn-sm"
-              onClick={() => handleRemove(item)}
+    <form onSubmit={handleSubmit}>
+      <h1 className="text-center mt-4">Specifications</h1>
+      <div className="row">
+        <div className="col">
+          <div class="input-group input-group-md mb-3">
+            <span class="input-group-text" id="inputGroup-sizing-sm">
+              Model Name
+            </span>
+            <input
+              type="text"
+              class="form-control"
+              value={modelName}
+              onChange={handleModelNameChange}
+            />
+          </div>
+        </div>
+        <div className="col">
+          <div className="input-group mb-3">
+            <label className="input-group-text" for="circuit_type">
+              Type
+            </label>
+            <select
+              className="form-select"
+              id="circuit_type"
+              value={circuitType}
+              onChange={handleCircuitTypeChange}
             >
-              &times;
-            </button>
-          </li>
-        ))}
-      </ul>
-    </div>
+              <option value="" disabled>
+                Choose...
+              </option>
+              {circuitTypes.map((option, index) => (
+                <option key={index} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div className="row">
+        <div className="col">
+          <DropdownFormControl
+            label="Inputs"
+            options={inputOptions}
+            selectedItems={selectedInputs}
+            onSelect={handleSelectInput}
+            onRemove={handleRemoveInput}
+          />
+        </div>
+        <div className="col">
+          <DropdownFormControl
+            label="Outputs"
+            options={outputOptions}
+            selectedItems={selectedOutputs}
+            onSelect={handleSelectOutput}
+            onRemove={handleRemoveOutput}
+          />
+        </div>
+      </div>
+      {/* gate specification fields */}
+      {["and", "nand", "or", "nor", "xor", "xnor"].includes(circuitType) && (
+        <div className="input-group mb-3">
+          <label className="input-group-text" for="gate_operation_type">
+            Operation Type
+          </label>
+          <select
+            className="form-select"
+            id="gate_operation_type"
+            value={gateTypeOperationType}
+            onChange={handleGateTypeOperationTypeChange}
+          >
+            <option value="" disabled>
+              Choose...
+            </option>
+
+            <option value="logical">logical</option>
+            <option value="bitwise">bitwise</option>
+          </select>
+        </div>
+      )}
+
+      <div className="mt-3">
+        <button type="submit" className="btn btn-primary">
+          Submit
+        </button>
+      </div>
+    </form>
   );
 };
 
-export default DropdownFormControl;
+export default MyForm;

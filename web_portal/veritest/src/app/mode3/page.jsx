@@ -12,7 +12,11 @@ export default function mode1() {
       <div className="d-flex  flex-column justify-content-center ">
         <Mode3_documentation_component />
         {/* <Mode3_file_upload_component /> */}
-        <Mode3_form_component />
+      </div>
+      <div class="container text-center">
+        <div class="row-lg-6">
+          <Mode3_form_component />
+        </div>
       </div>
     </div>
   );
