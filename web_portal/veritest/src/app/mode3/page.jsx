@@ -25,7 +25,7 @@ export default function mode1() {
       <div class="container text-center">
         <div class="row-lg-6">
           {!loading && responseData && (
-            <Mode3_form_component responseData={responseData} />
+            <Mode3_form_component responseData={responseData} ready={true} />
           )}
         </div>
       </div>

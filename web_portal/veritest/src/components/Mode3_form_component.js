@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import DropdownFormControl from "@/components/Mode3_dropdown_component";
 
-const MyForm = (responseData) => {
+const MyForm = (responseData, ready) => {
   // constants
   // circuit Types
   const circuitTypes = [
@@ -19,10 +19,10 @@ const MyForm = (responseData) => {
     "xor",
     "xnor",
   ];
-  const initialInputOptions = ["Input 1", "Input 2", "Input 3"];
+  const initialInputOptions = [];
   const initialOutputOptions = ["Output A", "Output B", "Output C"];
   // States
-  const [inputOptions, setInputOptions] = useState(initialInputOptions);
+  const [inputOptions, setInputOptions] = useState([]);
   const [selectedInputs, setSelectedInputs] = useState([]);
 
   const [outputOptions, setOutputOptions] = useState(initialOutputOptions);
@@ -81,9 +81,26 @@ const MyForm = (responseData) => {
   useEffect(() => {
     // Code to run once when the component mounts
     console.log("Component mounted");
-    console.log(responseData.responseData);
-    // Place your code here
-  }, []);
+
+    let data = responseData.responseData;
+    console.log(data);
+    // checking on the type
+
+    data.inputs.map((input, index) => {
+      console.log(input);
+      const newItem = `name:${input.name} size:${input.size}`;
+      console.log(selectedInputs);
+      // Check if the newItem already exists in selectedInputs
+      setSelectedInputs((prevSet) => {
+        const newSet = new Set(prevSet);
+        newSet.add(newItem);
+        return [...newSet];
+      });
+    });
+
+    if (["and", "nand", "or", "nor", "xor", "xnor"].includes(data.type)) {
+    }
+  }, [ready]);
 
   /////////////////////////////////////////
 
@@ -149,9 +166,7 @@ const MyForm = (responseData) => {
         </div>
       </div>
       {/* gate specification fields */}
-      {["not", "and", "nand", "or", "nor", "xor", "xnor"].includes(
-        circuitType
-      ) && (
+      {["and", "nand", "or", "nor", "xor", "xnor"].includes(circuitType) && (
         <div>
           <hr />
           <div className="input-group mb-3">
