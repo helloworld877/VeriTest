@@ -86,10 +86,13 @@ const MyForm = (responseData, ready) => {
     console.log(data);
     // checking on the type
 
+    setModelName(data["model_name"]);
+    setCircuitType(data.type);
+
     data.inputs.map((input, index) => {
       console.log(input);
       const newItem = `name:${input.name} size:${input.size}`;
-      console.log(selectedInputs);
+
       // Check if the newItem already exists in selectedInputs
       setSelectedInputs((prevSet) => {
         const newSet = new Set(prevSet);
@@ -99,6 +102,12 @@ const MyForm = (responseData, ready) => {
     });
 
     if (["and", "nand", "or", "nor", "xor", "xnor"].includes(data.type)) {
+      setSelectedOutputs((prevSet) => {
+        const newSet = new Set(prevSet);
+        newSet.add(data.output);
+        return [...newSet];
+      });
+      setGateTypeOperationType(data["operation_type"]);
     }
   }, [ready]);
 
