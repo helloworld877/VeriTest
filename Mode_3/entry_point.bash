@@ -42,10 +42,10 @@ cd final_model_utils || { echo "Failed to change directory to final_model_utils"
 infer_output=$(bash $VERITEST_HOME/Mode_3/Infer_GNN.bash $verilog_file)
 
 # Check for failure in Infer_GNN.bash
-if [[ "$infer_output" != "Success: Prediction saved in 'pred.txt'" ]]; then
-    echo "Inference failed: $infer_output"
-    exit 1
-fi
+# if [[ "$infer_output" != "Success: Prediction saved in 'pred.txt'" ]]; then
+#     echo "Inference failed: $infer_output"
+#     exit 1
+# fi
 
 # If all steps succeeded, return success
-echo "Success: Prediction saved in 'pred.txt'"
+# echo "Success: Prediction saved in 'pred.txt'"

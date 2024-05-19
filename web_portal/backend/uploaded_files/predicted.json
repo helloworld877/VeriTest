@@ -1,0 +1,12 @@
+{
+    "model_name": "and_test",
+    "type": "and",
+    "inputs": [
+        {
+            "name": "a",
+            "size": 1
+        }
+    ],
+    "output": "out",
+    "operation_type": "bitwise"
+}

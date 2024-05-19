@@ -5,6 +5,7 @@ import tempfile
 import zipfile
 from flask_cors import CORS
 import subprocess
+import json
 
 app = Flask(__name__)
 CORS(app)
@@ -60,6 +61,7 @@ def upload_files():
             print("EXCEPTION")
             print(e)
             return jsonify(success=False, error=str(e)), 400
+###############################################################################
     elif (mode_number == '2'):
         try:
             v_file = request.files['vFile']
@@ -106,10 +108,20 @@ def upload_files():
             print("EXCEPTION")
             print(e)
             return jsonify(success=False, error=str(e)), 400
+###############################################################################
     elif (mode_number == '3'):
         v_file = request.files['vFile']
         v_file.save('uploaded_files/' + v_file.filename)
-        return jsonify(success="mode3 success"), 200
+        arguments = []
+        arguments.append(os.path.abspath(
+            f"uploaded_files/{v_file.filename}"))
+        HOME = os.environ.get('VERITEST_HOME')
+        subprocess.run(
+            ['bash', f"{HOME}/Mode_3/entry_point.bash"] + arguments, check=True)
+        predicted_json = {}
+        with open(f"uploaded_files/predicted.json", "r") as json_file:
+            data = json.load(json_file)
+        return jsonify(data), 200
     else:
         return jsonify(success=False, error="Invalid Mode_Number"), 400
 

@@ -1,4 +1,4 @@
-module and19 (
+module and_test (
     input wire a,
     output wire out
 );

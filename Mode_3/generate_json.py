@@ -69,4 +69,13 @@ elif (prediction == "not"):
             input_value, output_value)}
         output_json["inputs_outputs"].append(result_dict)
 
+
+Veritest_Home = os.environ.get("VERITEST_HOME")
+
+file_path = os.path.join(
+    f"{Veritest_Home}/web_portal/backend/uploaded_files", "predicted.json")
+
+# Write the dictionary to a JSON file
+with open(file_path, "w") as json_file:
+    json.dump(output_json, json_file, indent=4)
 print(output_json)
