@@ -17,30 +17,32 @@ const DropdownFormControl = ({
   };
 
   return (
-    <div className="mb-3">
-      <label htmlFor={label} className="form-label">
-        <h2>{label}</h2>
-      </label>
-      <select
-        id={label}
-        className="form-select"
-        onChange={handleSelect}
-        value=""
-      >
-        <option value="" disabled>
-          Select an option
-        </option>
-        {options.map((option, index) => (
-          <option key={index} value={option}>
-            {option}
+    <div>
+      <div className="input-group mb-3">
+        <span class="input-group-text" id="basic-addon2">
+          {label}
+        </span>
+        <select
+          id={label}
+          className="form-select"
+          onChange={handleSelect}
+          value=""
+        >
+          <option value="" disabled>
+            Select an option
           </option>
-        ))}
-      </select>
+          {options.map((option, index) => (
+            <option key={index} value={option}>
+              {option}
+            </option>
+          ))}
+        </select>
+      </div>
       <ul className="list-group mt-3">
         {selectedItems.map((item, index) => (
           <li
             key={index}
-            className="list-group-item d-flex justify-content-between align-items-center"
+            className="list-group-item d-flex justify-content-between align-items-center bg-dark text-white"
           >
             {item}
             <button

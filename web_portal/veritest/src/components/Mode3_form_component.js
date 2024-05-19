@@ -1,8 +1,8 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import DropdownFormControl from "@/components/Mode3_dropdown_component";
 
-const MyForm = () => {
+const MyForm = (responseData) => {
   // constants
   // circuit Types
   const circuitTypes = [
@@ -77,6 +77,15 @@ const MyForm = () => {
     setGateTypeOperationType(e.target.value);
   };
   /////////////////////////////////////////
+  // code runs once in the start to fill out form fields
+  useEffect(() => {
+    // Code to run once when the component mounts
+    console.log("Component mounted");
+    console.log(responseData.responseData);
+    // Place your code here
+  }, []);
+
+  /////////////////////////////////////////
 
   return (
     <form onSubmit={handleSubmit}>
@@ -140,29 +149,34 @@ const MyForm = () => {
         </div>
       </div>
       {/* gate specification fields */}
-      {["and", "nand", "or", "nor", "xor", "xnor"].includes(circuitType) && (
-        <div className="input-group mb-3">
-          <label className="input-group-text" for="gate_operation_type">
-            Operation Type
-          </label>
-          <select
-            className="form-select"
-            id="gate_operation_type"
-            value={gateTypeOperationType}
-            onChange={handleGateTypeOperationTypeChange}
-          >
-            <option value="" disabled>
-              Choose...
-            </option>
+      {["not", "and", "nand", "or", "nor", "xor", "xnor"].includes(
+        circuitType
+      ) && (
+        <div>
+          <hr />
+          <div className="input-group mb-3">
+            <label className="input-group-text" for="gate_operation_type">
+              Operation Type
+            </label>
+            <select
+              className="form-select"
+              id="gate_operation_type"
+              value={gateTypeOperationType}
+              onChange={handleGateTypeOperationTypeChange}
+            >
+              <option value="" disabled>
+                Choose...
+              </option>
 
-            <option value="logical">logical</option>
-            <option value="bitwise">bitwise</option>
-          </select>
+              <option value="logical">logical</option>
+              <option value="bitwise">bitwise</option>
+            </select>
+          </div>
         </div>
       )}
 
       <div className="mt-3">
-        <button type="submit" className="btn btn-primary">
+        <button type="submit" className="btn btn-success">
           Submit
         </button>
       </div>

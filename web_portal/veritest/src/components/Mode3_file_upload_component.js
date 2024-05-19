@@ -1,33 +1,33 @@
 "use client";
 import React, { useState } from "react";
 import axios from "axios";
-import Image from "next/image";
 
-const UploadForm = () => {
+const UploadForm = ({ loading, setLoading, responseData, setResponseData }) => {
   const [vFile, setVFile] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
-  const [downloadedFile, setDownloadedFile] = useState("");
-  const [ready, setReady] = useState(false);
 
   const handleVFileChange = (e) => {
     setVFile(e.target.files[0]);
   };
 
   const handleSubmit = async (e) => {
-    setReady(false);
+    setLoading(true);
     e.preventDefault();
 
     // Check if files are empty
     if (!vFile) {
       setErrorMessage("Please select a .v file");
+      setLoading(false);
       return;
     }
-    // check if files are in the wrong format
+    // Check if files are in the wrong format
     else if (!vFile.name.endsWith(".v")) {
       setErrorMessage("Please select the file with the correct extension.");
+      setLoading(false);
       return;
     }
-    // You can proceed with file upload logic here
+
+    // Proceed with file upload logic here
     const formData = new FormData();
     formData.append("vFile", vFile);
     formData.append("Mode_Number", "3");
@@ -40,14 +40,16 @@ const UploadForm = () => {
           headers: {
             "Content-Type": "multipart/form-data",
           },
-          responseType: "blob", // Set response type to blob
+          responseType: "json", // Set response type to JSON
         }
       );
 
-      setDownloadedFile(response.data);
-      setReady(true);
+      setResponseData(response.data);
+      setLoading(false);
     } catch (error) {
       console.error("Error uploading files:", error);
+      setErrorMessage("An error occurred while uploading the file.");
+      setLoading(false);
     }
   };
 
@@ -73,20 +75,20 @@ const UploadForm = () => {
                 onChange={handleVFileChange}
               />
             </div>
-            <button type="submit" className=" btn btn-success">
-              Upload File
+            <button
+              type="submit"
+              className="btn btn-success"
+              disabled={loading}
+            >
+              {loading ? "Uploading..." : "Upload File"}
             </button>
           </form>
 
-          {downloadedFile && ready && (
-            <a
-              href={URL.createObjectURL(new Blob([downloadedFile]))}
-              download="result.zip"
-            >
-              <button type="button" className="mt-2 btn btn-outline-success">
-                download the Generated testbench
-              </button>
-            </a>
+          {responseData && !loading && (
+            <div className="mt-3">
+              <h5>Response Data:</h5>
+              <pre>{JSON.stringify(responseData, null, 2)}</pre>
+            </div>
           )}
         </div>
       </div>
