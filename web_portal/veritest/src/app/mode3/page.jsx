@@ -8,6 +8,7 @@ import Mode3_form_component from "@/components/Mode3_form_component";
 export default function mode1() {
   const [loading, setLoading] = useState(false);
   const [responseData, setResponseData] = useState(null);
+  const [file, setFile] = useState();
 
   return (
     <div>
@@ -22,8 +23,8 @@ export default function mode1() {
           setResponseData={setResponseData}
         />
       </div>
-      <div class="container text-center">
-        <div class="row-lg-6">
+      <div className="container text-center">
+        <div className="row-lg-6">
           {!loading && responseData && (
             <Mode3_form_component responseData={responseData} ready={true} />
           )}

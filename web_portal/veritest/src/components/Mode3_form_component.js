@@ -1,8 +1,21 @@
 "use client";
 import { useState, useEffect } from "react";
 import DropdownFormControl from "@/components/Mode3_dropdown_component";
+import axios from "axios";
 
 const MyForm = (responseData, ready) => {
+  // helper functions
+  function parseStringToObject(str) {
+    const obj = {};
+    const pairs = str.split(" ");
+
+    pairs.forEach((pair) => {
+      const [key, value] = pair.split(":");
+      obj[key] = isNaN(value) ? value : Number(value);
+    });
+
+    return obj;
+  }
   // constants
   // circuit Types
   const circuitTypes = [
@@ -66,9 +79,40 @@ const MyForm = (responseData, ready) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle form submission logic here, e.g., send data to a server or validate the form
-    console.log("Form submitted with selected inputs:", selectedInputs);
-    console.log("Form submitted with selected outputs:", selectedOutputs);
+
+    if (["and", "nand", "or", "nor", "xor", "xnor"].includes(circuitType)) {
+      var requestData = {
+        model_name: `${modelName}`,
+        type: `${circuitType}`,
+        operation_type: `${gateTypeOperationType}`,
+        inputs: [],
+        output: "",
+      };
+
+      selectedInputs.map((input, index) => {
+        let result = parseStringToObject(input);
+        requestData.inputs.push(result);
+      });
+      requestData.output = selectedOutputs[0];
+
+      // console.log(vFile);
+      const formData = new FormData();
+      formData.append("json", JSON.stringify(requestData));
+      // formData.append("vFile", vFile);
+
+      axios
+        .post("http://localhost:5000/submit_prediction", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    }
   };
 
   /////////////////////////////////////////
@@ -80,17 +124,15 @@ const MyForm = (responseData, ready) => {
   // code runs once in the start to fill out form fields
   useEffect(() => {
     // Code to run once when the component mounts
-    console.log("Component mounted");
-
+    // console.log(vFile);
     let data = responseData.responseData;
-    console.log(data);
+
     // checking on the type
 
     setModelName(data["model_name"]);
     setCircuitType(data.type);
 
     data.inputs.map((input, index) => {
-      console.log(input);
       const newItem = `name:${input.name} size:${input.size}`;
 
       // Check if the newItem already exists in selectedInputs
@@ -118,13 +160,13 @@ const MyForm = (responseData, ready) => {
       <h1 className="text-center mt-4">Specifications</h1>
       <div className="row">
         <div className="col">
-          <div class="input-group input-group-md mb-3">
-            <span class="input-group-text" id="inputGroup-sizing-sm">
+          <div className="input-group input-group-md mb-3">
+            <span className="input-group-text" id="inputGroup-sizing-sm">
               Model Name
             </span>
             <input
               type="text"
-              class="form-control"
+              className="form-control"
               value={modelName}
               onChange={handleModelNameChange}
             />
@@ -132,7 +174,7 @@ const MyForm = (responseData, ready) => {
         </div>
         <div className="col">
           <div className="input-group mb-3">
-            <label className="input-group-text" for="circuit_type">
+            <label className="input-group-text" htmlFor="circuit_type">
               Type
             </label>
             <select
@@ -179,7 +221,7 @@ const MyForm = (responseData, ready) => {
         <div>
           <hr />
           <div className="input-group mb-3">
-            <label className="input-group-text" for="gate_operation_type">
+            <label className="input-group-text" htmlFor="gate_operation_type">
               Operation Type
             </label>
             <select

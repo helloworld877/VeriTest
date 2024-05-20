@@ -19,7 +19,7 @@ const DropdownFormControl = ({
   return (
     <div>
       <div className="input-group mb-3">
-        <span class="input-group-text" id="basic-addon2">
+        <span className="input-group-text" id="basic-addon2">
           {label}
         </span>
         <select

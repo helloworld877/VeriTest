@@ -84,12 +84,12 @@ const UploadForm = ({ loading, setLoading, responseData, setResponseData }) => {
             </button>
           </form>
 
-          {responseData && !loading && (
+          {/* {responseData && !loading && (
             <div className="mt-3">
               <h5>Response Data:</h5>
               <pre>{JSON.stringify(responseData, null, 2)}</pre>
             </div>
-          )}
+          )} */}
         </div>
       </div>
     </div>

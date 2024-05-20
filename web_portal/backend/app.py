@@ -121,9 +121,25 @@ def upload_files():
         predicted_json = {}
         with open(f"uploaded_files/predicted.json", "r") as json_file:
             data = json.load(json_file)
+        os.remove('uploaded_files/' + v_file.filename)
         return jsonify(data), 200
     else:
         return jsonify(success=False, error="Invalid Mode_Number"), 400
+
+#########################################################
+
+
+@app.route('/submit_prediction', methods=['POST'])
+def submit_prediction():
+    json_data = request.form.get('json')
+    # if json_data:
+    #     circuit_dict = json.loads(json_data)
+
+    # # Get the file
+    # v_file = request.files['vFile']
+    # v_file.save('uploaded_files/hello ' + v_file.filename)
+    # print(circuit_dict)
+    return jsonify({"success": True}), 200
 
 
 if __name__ == '__main__':
