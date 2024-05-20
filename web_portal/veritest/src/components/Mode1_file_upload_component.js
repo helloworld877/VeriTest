@@ -116,7 +116,7 @@ const UploadForm = () => {
               </a>
             </div>
           )}
-          <Toggle_coverage_table_component />
+          {/* <Toggle_coverage_table_component /> */}
         </div>
       </div>
     </div>

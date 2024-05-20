@@ -44,6 +44,9 @@ const MyForm = ({ responseData, ready, file }) => {
   const [circuitType, setCircuitType] = useState("");
 
   const [modelName, setModelName] = useState("");
+
+  const [downloadUrl, setDownloadUrl] = useState(null);
+  const [loading, setLoading] = useState(false);
   /////////////////////////////////////////
   // gate circuit type
   const [gateTypeOperationType, setGateTypeOperationType] = useState("");
@@ -80,6 +83,7 @@ const MyForm = ({ responseData, ready, file }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    setLoading(true);
     if (["and", "nand", "or", "nor", "xor", "xnor"].includes(circuitType)) {
       var requestData = {
         model_name: `${modelName}`,
@@ -105,16 +109,28 @@ const MyForm = ({ responseData, ready, file }) => {
           headers: {
             "Content-Type": "multipart/form-data",
           },
+          responseType: "blob",
         })
         .then((response) => {
-          console.log(response.data);
+          // console.log(response.data);
+          const blobUrl = window.URL.createObjectURL(new Blob([response.data]));
+          setDownloadUrl(blobUrl);
+          setLoading(false);
         })
         .catch((error) => {
           console.error("Error:", error);
         });
     }
   };
-
+  const handleDownload = () => {
+    const link = document.createElement("a");
+    link.href = downloadUrl;
+    link.setAttribute("download", "results.zip");
+    document.body.appendChild(link);
+    link.click();
+    // Cleanup
+    URL.revokeObjectURL(downloadUrl);
+  };
   /////////////////////////////////////////
   // gate circuit type
   const handleGateTypeOperationTypeChange = (e) => {
@@ -156,97 +172,117 @@ const MyForm = ({ responseData, ready, file }) => {
   /////////////////////////////////////////
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h1 className="text-center mt-4">Specifications</h1>
-      <div className="row">
-        <div className="col">
-          <div className="input-group input-group-md mb-3">
-            <span className="input-group-text" id="inputGroup-sizing-sm">
-              Model Name
-            </span>
-            <input
-              type="text"
-              className="form-control"
-              value={modelName}
-              onChange={handleModelNameChange}
+    <div>
+      <form onSubmit={handleSubmit}>
+        <h1 className="text-center mt-4">Specifications</h1>
+        <div className="row">
+          <div className="col">
+            <div className="input-group input-group-md mb-3">
+              <span className="input-group-text" id="inputGroup-sizing-sm">
+                Model Name
+              </span>
+              <input
+                type="text"
+                className="form-control"
+                value={modelName}
+                onChange={handleModelNameChange}
+              />
+            </div>
+          </div>
+          <div className="col">
+            <div className="input-group mb-3">
+              <label className="input-group-text" htmlFor="circuit_type">
+                Type
+              </label>
+              <select
+                className="form-select"
+                id="circuit_type"
+                value={circuitType}
+                onChange={handleCircuitTypeChange}
+              >
+                <option value="" disabled>
+                  Choose...
+                </option>
+                {circuitTypes.map((option, index) => (
+                  <option key={index} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col">
+            <DropdownFormControl
+              label="Inputs"
+              options={inputOptions}
+              selectedItems={selectedInputs}
+              onSelect={handleSelectInput}
+              onRemove={handleRemoveInput}
+            />
+          </div>
+          <div className="col">
+            <DropdownFormControl
+              label="Outputs"
+              options={outputOptions}
+              selectedItems={selectedOutputs}
+              onSelect={handleSelectOutput}
+              onRemove={handleRemoveOutput}
             />
           </div>
         </div>
-        <div className="col">
-          <div className="input-group mb-3">
-            <label className="input-group-text" htmlFor="circuit_type">
-              Type
-            </label>
-            <select
-              className="form-select"
-              id="circuit_type"
-              value={circuitType}
-              onChange={handleCircuitTypeChange}
-            >
-              <option value="" disabled>
-                Choose...
-              </option>
-              {circuitTypes.map((option, index) => (
-                <option key={index} value={option}>
-                  {option}
+        {/* gate specification fields */}
+        {["and", "nand", "or", "nor", "xor", "xnor"].includes(circuitType) && (
+          <div>
+            <hr />
+            <div className="input-group mb-3">
+              <label className="input-group-text" htmlFor="gate_operation_type">
+                Operation Type
+              </label>
+              <select
+                className="form-select"
+                id="gate_operation_type"
+                value={gateTypeOperationType}
+                onChange={handleGateTypeOperationTypeChange}
+              >
+                <option value="" disabled>
+                  Choose...
                 </option>
-              ))}
-            </select>
+                <option value="logical">logical</option>
+                <option value="bitwise">bitwise</option>
+              </select>
+            </div>
           </div>
+        )}
+        <div className="mt-3">
+          <button type="submit" className="btn btn-success">
+            {loading ? (
+              <div>
+                <span
+                  className="spinner-border spinner-border-sm"
+                  aria-hidden="true"
+                ></span>
+                <span class="ms-2" role="status">
+                  Uploading...
+                </span>
+              </div>
+            ) : (
+              "Submit"
+            )}
+          </button>
         </div>
-      </div>
-
-      <div className="row">
-        <div className="col">
-          <DropdownFormControl
-            label="Inputs"
-            options={inputOptions}
-            selectedItems={selectedInputs}
-            onSelect={handleSelectInput}
-            onRemove={handleRemoveInput}
-          />
-        </div>
-        <div className="col">
-          <DropdownFormControl
-            label="Outputs"
-            options={outputOptions}
-            selectedItems={selectedOutputs}
-            onSelect={handleSelectOutput}
-            onRemove={handleRemoveOutput}
-          />
-        </div>
-      </div>
-      {/* gate specification fields */}
-      {["and", "nand", "or", "nor", "xor", "xnor"].includes(circuitType) && (
-        <div>
-          <hr />
-          <div className="input-group mb-3">
-            <label className="input-group-text" htmlFor="gate_operation_type">
-              Operation Type
-            </label>
-            <select
-              className="form-select"
-              id="gate_operation_type"
-              value={gateTypeOperationType}
-              onChange={handleGateTypeOperationTypeChange}
-            >
-              <option value="" disabled>
-                Choose...
-              </option>
-
-              <option value="logical">logical</option>
-              <option value="bitwise">bitwise</option>
-            </select>
-          </div>
-        </div>
-      )}
-
-      <div className="mt-3">
-        <button type="submit" className="btn btn-success">
-          Submit
+      </form>
+      {downloadUrl && (
+        <button
+          type="button"
+          className="btn btn-outline-success btn-lg mt-3"
+          onClick={handleDownload}
+        >
+          Download Zip File
         </button>
-      </div>
-    </form>
+      )}
+    </div>
   );
 };
 
