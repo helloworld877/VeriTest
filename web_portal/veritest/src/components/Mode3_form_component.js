@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import DropdownFormControl from "@/components/Mode3_dropdown_component";
 import axios from "axios";
 
-const MyForm = (responseData, ready) => {
+const MyForm = ({ responseData, ready, file }) => {
   // helper functions
   function parseStringToObject(str) {
     const obj = {};
@@ -95,10 +95,10 @@ const MyForm = (responseData, ready) => {
       });
       requestData.output = selectedOutputs[0];
 
-      // console.log(vFile);
+      // console.log(file);
       const formData = new FormData();
       formData.append("json", JSON.stringify(requestData));
-      // formData.append("vFile", vFile);
+      formData.append("vFile", file);
 
       axios
         .post("http://localhost:5000/submit_prediction", formData, {
@@ -124,8 +124,8 @@ const MyForm = (responseData, ready) => {
   // code runs once in the start to fill out form fields
   useEffect(() => {
     // Code to run once when the component mounts
-    // console.log(vFile);
-    let data = responseData.responseData;
+    // console.log(file);
+    let data = responseData;
 
     // checking on the type
 

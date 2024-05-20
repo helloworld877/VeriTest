@@ -21,12 +21,20 @@ export default function mode1() {
           setLoading={setLoading}
           responseData={responseData}
           setResponseData={setResponseData}
+          file={file}
+          setFile={setFile}
         />
       </div>
       <div className="container text-center">
         <div className="row-lg-6">
-          {!loading && responseData && (
-            <Mode3_form_component responseData={responseData} ready={true} />
+          {!loading && responseData && typeof file !== "undefined" && (
+            <div>
+              <Mode3_form_component
+                responseData={responseData}
+                ready={true}
+                file={file}
+              />
+            </div>
           )}
         </div>
       </div>

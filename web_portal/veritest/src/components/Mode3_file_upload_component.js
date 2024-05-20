@@ -2,12 +2,20 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-const UploadForm = ({ loading, setLoading, responseData, setResponseData }) => {
+const UploadForm = ({
+  loading,
+  setLoading,
+  responseData,
+  setResponseData,
+  file,
+  setFile,
+}) => {
   const [vFile, setVFile] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleVFileChange = (e) => {
     setVFile(e.target.files[0]);
+    setFile(e.target.files[0]);
   };
 
   const handleSubmit = async (e) => {
@@ -80,7 +88,19 @@ const UploadForm = ({ loading, setLoading, responseData, setResponseData }) => {
               className="btn btn-success"
               disabled={loading}
             >
-              {loading ? "Uploading..." : "Upload File"}
+              {loading ? (
+                <div>
+                  <span
+                    className="spinner-border spinner-border-sm"
+                    aria-hidden="true"
+                  ></span>
+                  <span class="ms-2" role="status">
+                    Uploading...
+                  </span>
+                </div>
+              ) : (
+                "Upload File"
+              )}
             </button>
           </form>
 
