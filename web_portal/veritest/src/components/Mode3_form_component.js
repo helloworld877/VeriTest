@@ -32,13 +32,12 @@ const MyForm = ({ responseData, ready, file }) => {
     "xor",
     "xnor",
   ];
-  const initialInputOptions = [];
-  const initialOutputOptions = ["Output A", "Output B", "Output C"];
+
   // States
   const [inputOptions, setInputOptions] = useState([]);
   const [selectedInputs, setSelectedInputs] = useState([]);
 
-  const [outputOptions, setOutputOptions] = useState(initialOutputOptions);
+  const [outputOptions, setOutputOptions] = useState([]);
   const [selectedOutputs, setSelectedOutputs] = useState([]);
 
   const [circuitType, setCircuitType] = useState("");
@@ -50,6 +49,10 @@ const MyForm = ({ responseData, ready, file }) => {
   /////////////////////////////////////////
   // gate circuit type
   const [gateTypeOperationType, setGateTypeOperationType] = useState("");
+  /////////////////////////////////////////
+  // decoder, encoder and seven_segment
+  const [encoderTypeInputMode, setEncoderTypeInputMode] = useState("");
+  const [encoderTypeOutputMode, setEncoderTypeOutputMode] = useState("");
   /////////////////////////////////////////
 
   // state handlers
@@ -80,10 +83,18 @@ const MyForm = ({ responseData, ready, file }) => {
     setModelName(e.target.value);
   };
 
+  const handleEncoderTypeInputModeChange = (e) => {
+    setEncoderTypeInputMode(e.target.value);
+  };
+  const handleEncoderTypeOutputModeChange = (e) => {
+    setEncoderTypeOutputMode(e.target.value);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
     setLoading(true);
+    const formData = new FormData();
     if (["and", "nand", "or", "nor", "xor", "xnor"].includes(circuitType)) {
       var requestData = {
         model_name: `${modelName}`,
@@ -100,27 +111,46 @@ const MyForm = ({ responseData, ready, file }) => {
       requestData.output = selectedOutputs[0];
 
       // console.log(file);
-      const formData = new FormData();
+
       formData.append("json", JSON.stringify(requestData));
       formData.append("vFile", file);
-
-      axios
-        .post("http://localhost:5000/submit_prediction", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-          responseType: "blob",
-        })
-        .then((response) => {
-          // console.log(response.data);
-          const blobUrl = window.URL.createObjectURL(new Blob([response.data]));
-          setDownloadUrl(blobUrl);
-          setLoading(false);
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-        });
+    } else if (["decoder", "encoder", "seg"].includes(circuitType)) {
+      var requestData = {
+        model_name: `${modelName}`,
+        type: `${circuitType}`,
+        input_mode: `${encoderTypeInputMode}`,
+        output_mode: `${encoderTypeOutputMode}`,
+        inputs: [],
+        output: [],
+      };
+      selectedInputs.map((input, index) => {
+        let result = parseStringToObject(input);
+        requestData.inputs.push(result);
+      });
+      selectedOutputs.map((output, index) => {
+        let result = parseStringToObject(output);
+        requestData.output.push(result);
+      });
+      formData.append("json", JSON.stringify(requestData));
+      formData.append("vFile", file);
     }
+
+    axios
+      .post("http://localhost:5000/submit_prediction", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        responseType: "blob",
+      })
+      .then((response) => {
+        // console.log(response.data);
+        const blobUrl = window.URL.createObjectURL(new Blob([response.data]));
+        setDownloadUrl(blobUrl);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
   };
   const handleDownload = () => {
     const link = document.createElement("a");
@@ -166,6 +196,19 @@ const MyForm = ({ responseData, ready, file }) => {
         return [...newSet];
       });
       setGateTypeOperationType(data["operation_type"]);
+    } else if (["decoder", "encoder", "seg"].includes(data.type)) {
+      data.output.map((output, index) => {
+        const newItem = `name:${output.name} size:${output.size}`;
+
+        // Check if the newItem already exists in selectedOutputs
+        setSelectedOutputs((prevSet) => {
+          const newSet = new Set(prevSet);
+          newSet.add(newItem);
+          return [...newSet];
+        });
+      });
+      setEncoderTypeInputMode(data["input_mode"]);
+      setEncoderTypeOutputMode(data["output_mode"]);
     }
   }, [ready]);
 
@@ -251,6 +294,47 @@ const MyForm = ({ responseData, ready, file }) => {
                 </option>
                 <option value="logical">logical</option>
                 <option value="bitwise">bitwise</option>
+              </select>
+            </div>
+          </div>
+        )}
+        {/* decoder,encoder,seven_segment specification field */}
+        {["decoder", "encoder", "seg"].includes(circuitType) && (
+          <div>
+            <hr />
+            <div className="input-group input-group-md mb-3">
+              <span className="input-group-text" id="inputGroup-sizing-sm">
+                Input Mode
+              </span>
+              <select
+                className="form-select"
+                id="gate_operation_type"
+                value={encoderTypeInputMode}
+                onChange={handleEncoderTypeInputModeChange}
+              >
+                <option value="" disabled>
+                  Choose...
+                </option>
+                <option value="logical">separate</option>
+                <option value="bitwise">concatenated</option>
+              </select>
+            </div>
+
+            <div className="input-group input-group-md mb-3">
+              <span className="input-group-text" id="inputGroup-sizing-sm">
+                Output Mode
+              </span>
+              <select
+                className="form-select"
+                id="gate_operation_type"
+                value={encoderTypeOutputMode}
+                onChange={handleEncoderTypeOutputModeChange}
+              >
+                <option value="" disabled>
+                  Choose...
+                </option>
+                <option value="logical">separate</option>
+                <option value="bitwise">concatenated</option>
               </select>
             </div>
           </div>
