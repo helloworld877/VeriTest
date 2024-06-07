@@ -1,6 +1,7 @@
 from PARSER.components.IN_OUT_WIRE.OUTPUT import OUTPUT
 from PARSER.components.IN_OUT_WIRE.WIRE import wire
 from PARSER.components.Node import node
+from PARSER.components.IN_OUT_WIRE.REG import REG
 
 
 
@@ -65,7 +66,7 @@ class Lgate(node):
 
     def pass_output_to_ports(self, output, connection):
         connection.PORT = output
-        if isinstance(connection.destination, OUTPUT) or isinstance(connection.destination, wire):
+        if isinstance(connection.destination, OUTPUT) or isinstance(connection.destination, wire) or isinstance(connection.destination, REG):
             connection.destination.add_bits_to_output(connection)
         
 

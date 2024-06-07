@@ -4,6 +4,7 @@ from components.INPUT import Input
 import networkx as nx
 import matplotlib.pyplot as plt
 
+
 def get_assignments(node):
     assignments = []
 
@@ -17,6 +18,7 @@ def get_assignments(node):
 
     return assignments
 
+
 def parse_verilog(file_path):
     # Parse the Verilog code
     ast, _ = parse([file_path])
@@ -25,6 +27,7 @@ def parse_verilog(file_path):
     assignments = get_assignments(ast)
 
     return assignments
+
 
 if __name__ == "__main__":
     verilog_file = "module.v"
@@ -39,16 +42,9 @@ if __name__ == "__main__":
         if isinstance(left, Partselect):
             pass
         else:
-            node = Input(name=left.name, start=0, end=5, size = 0, Type="OUTPUT")
-
-        
+            node = Input(name=left.name, start=0, end=5, size=0, Type="OUTPUT")
 
         G.add_node(node)
-            
-    
 
-    nx.draw_spring(G, with_labels = True)
+    nx.draw_spring(G, with_labels=True)
     # plt.show()
-
-
-   

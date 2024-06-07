@@ -17,10 +17,10 @@ if len(sys.argv) < 2:
     sys.exit(1)
 
 filename = sys.argv[1]
-prediction = sys.argv[2]
+prediction = sys.argv[2].lower()
 # filename = "my_module.v"
 
-
+print("JSON DONE")
 G, input_output_wire = code_to_graph(filename)
 
 
@@ -76,6 +76,7 @@ file_path = os.path.join(
     f"{Veritest_Home}/web_portal/backend/uploaded_files", "predicted.json")
 
 # Write the dictionary to a JSON file
+
 with open(file_path, "w") as json_file:
     json.dump(output_json, json_file, indent=4)
 print(output_json)

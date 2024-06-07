@@ -1,5 +1,6 @@
 from PARSER.components.IN_OUT_WIRE.OUTPUT import OUTPUT
 from PARSER.components.IN_OUT_WIRE.WIRE import wire
+from PARSER.components.IN_OUT_WIRE.REG import REG
 from PARSER.components.Node import node
 
 
@@ -42,7 +43,7 @@ class adder(node):
         in_port_1 = list_of_IN_port[0]
         in_port_2 = list_of_IN_port[1]
        
-
+        
 
         num1 = self.convert_bin_to_decimal(in_port_1)
         num2 = self.convert_bin_to_decimal(in_port_2)
@@ -60,7 +61,7 @@ class adder(node):
 
     def pass_output_to_ports(self, output, connection):
         connection.PORT = output
-        if isinstance(connection.destination, OUTPUT) or isinstance(connection.destination, wire):
+        if isinstance(connection.destination, OUTPUT) or isinstance(connection.destination, wire) or isinstance(connection.destination, REG):
             connection.destination.add_bits_to_output(connection)
         
 

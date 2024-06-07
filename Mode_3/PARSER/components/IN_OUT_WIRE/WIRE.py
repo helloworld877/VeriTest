@@ -19,9 +19,13 @@ class wire(node):
     def add_bits_to_output(self, connection):
         if connection.destination_range == None:
             if self.endian == "little":
-                self.output = list(connection.PORT)[::-1][0:self.size][::-1]
+                if len(connection.PORT) < self.size:
+                    connection.PORT = (["0"] * (self.size - len(connection.PORT))) + connection.PORT
+                self.output = connection.PORT[::-1][0:self.size][::-1]
             else:
-                self.output = list(connection.PORT)[0:self.size]
+                if len(connection.PORT) < self.size:
+                    connection.PORT = connection.PORT + ("0" * (self.size - len(connection.PORT)))
+                self.output = connection.PORT[0:self.size]
             
         else:
             start = connection.destination_range[0]
@@ -76,7 +80,7 @@ class wire(node):
         for connection in connections:
             self.pass_output_to_ports(output, connection)
 
-        if self.node_points_to_me(connections[0].destination.connections) and "X" in self.output: 
+        if self.node_points_to_me(connections[0].destination.connections): 
             return False
         return True
 
