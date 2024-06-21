@@ -1,12 +1,16 @@
-module decoder_test (a,b,en,y);
-    input a,b,en;   
-    output reg [3:0] y;
+module decoder_test (in,out);
+    input [1:0] in;
+    output reg [3:0] out;
 
-    always @(en,a,b)
+    always @(in)
     begin
-        if(a==1'b0 & b==1'b0) y=4'b1110;
-            else if(a==1'b0 & b==1'b1) y=4'b1101;
-            else if(a==1'b1 & b==1'b0) y=4'b1011;
-            else if(a==1 & b==1) y=4'b0111;
+        if(in == 2'b00) 
+            out=4'b0001;
+        else if(in == 2'b01) 
+            out=4'b0010;
+        else if(in == 2'b10)
+            out=4'b0100;
+        else if(in == 2'b11) 
+            out=4'b1000;
     end
 endmodule

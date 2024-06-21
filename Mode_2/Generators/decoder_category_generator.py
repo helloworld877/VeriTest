@@ -51,6 +51,7 @@ def compute(specs_dict):
             output_code.append(f'''\t{x['name']}=output_string[{i}]''')
             i += 1
     else:
+        output_code.append("\toutput_string = output_string[::-1]")
         output_code.append(
             f'''\t{specs_dict['output'][0]['name']}=output_string''')
 

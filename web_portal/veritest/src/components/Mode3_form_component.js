@@ -315,8 +315,8 @@ const MyForm = ({ responseData, ready, file }) => {
                 <option value="" disabled>
                   Choose...
                 </option>
-                <option value="logical">separate</option>
-                <option value="bitwise">concatenated</option>
+                <option value="separate">separate</option>
+                <option value="concatenated">concatenated</option>
               </select>
             </div>
 
@@ -333,8 +333,8 @@ const MyForm = ({ responseData, ready, file }) => {
                 <option value="" disabled>
                   Choose...
                 </option>
-                <option value="logical">separate</option>
-                <option value="bitwise">concatenated</option>
+                <option value="separate">separate</option>
+                <option value="concatenated">concatenated</option>
               </select>
             </div>
           </div>

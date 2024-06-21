@@ -10,6 +10,8 @@ const UploadForm = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [downloadedFile, setDownloadedFile] = useState("");
   const [ready, setReady] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   const handleVFileChange = (e) => {
     setVFile(e.target.files[0]);
   };
@@ -21,6 +23,7 @@ const UploadForm = () => {
   const handleSubmit = async (e) => {
     setReady(false);
     e.preventDefault();
+    setLoading(true);
 
     // Check if files are empty
     if (!vFile || !pyFile) {
@@ -57,7 +60,7 @@ const UploadForm = () => {
           responseType: "blob", // Set response type to blob
         }
       );
-
+      setLoading(false);
       setDownloadedFile(response.data);
       setReady(true);
     } catch (error) {
@@ -99,8 +102,20 @@ const UploadForm = () => {
                 onChange={handlePyFileChange}
               />
             </div>
-            <button type="submit" className=" btn btn-success">
-              Upload Files
+            <button type="submit" className="btn btn-success">
+              {loading ? (
+                <div>
+                  <span
+                    className="spinner-border spinner-border-sm"
+                    aria-hidden="true"
+                  ></span>
+                  <span class="ms-2" role="status">
+                    Uploading...
+                  </span>
+                </div>
+              ) : (
+                "Upload Files"
+              )}
             </button>
           </form>
 

@@ -1,10 +1,10 @@
 def compute(inputs):
-	a = int(inputs["a"],2)
+	a = inputs["a"]
 
-	b = int(inputs["b"],2)
+	b = inputs["b"]
 
-	result_int = a & b 
-
-	result_binary = str(bin(result_int)[2:])
+	result_binary='' 
+	for i in range (0,1):
+		result_binary += str(bin( int(a[i]) & int(b[i])))[2:]
 	return{ 'out' : result_binary } 
 

@@ -11,6 +11,8 @@ def read_starting_file(test_cases_filename):
     with open(test_cases_filename, 'r') as file:
         filename = file.readline().strip()
     try:
+        print("IMPORTANT")
+        print(filename)
         module = importlib.import_module(filename)
         print(f"Successfully imported module: {filename}")
         compute_function = getattr(module, 'compute', None)
